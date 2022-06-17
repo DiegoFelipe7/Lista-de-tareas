@@ -136,8 +136,9 @@ const datos = (data) => {
       btn_editar.classList.add("actualizar_sub", "btn", "btn-dark");
       btn_editar.textContent = "U";
       btn_editar.title = "Editar tarea";
-      btn_editar.dataset.id = element.subtarea[key].id;
+      btn_editar.dataset.id_tarea = element.subtarea[key].id;
       btn_editar.dataset.nombre = element.subtarea[key].nombre;
+      btn_editar.dataset.estado = element.subtarea[key].estado;
 
       const btn_eliminar = document.createElement("button");
       btn_eliminar.classList.add("eliminar_sub", "btn", "btn-danger", "ms-1");
@@ -153,8 +154,10 @@ const datos = (data) => {
         "ms-1"
       );
       btn_completado.textContent = "C";
-      btn_editar.title = "Completando tarea";
+      btn_editar.title = "Completando";
       btn_completado.dataset.id = element.subtarea[key].id;
+      btn_completado.dataset.nombre = element.subtarea[key].nombre;
+      btn_completado.dataset.id_tarea = element.id;
 
       tdAcciones.append(btn_editar, btn_eliminar, btn_completado);
 
@@ -229,34 +232,67 @@ document.addEventListener("click", (e) => {
   }
 
   if (e.target.matches(".guardar_subtarea")) {
-    let subtarea = document.getElementById("nombre_subtarea").value;
-    if (subtarea.trim() === "") {
-      Swal.fire("Ingresa subtarea");
-      return;
-    }
-    console.log(e.target.dataset.id);
-    let config = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        estado: "incompleta",
-        nombre: subtarea,
-        id_subtareas: {
-          id: e.target.dataset.id,
+    if (!e.target.dataset.id_tarea) {
+      e.preventDefault();
+      let subtarea = e.path[2].children[0].children[0].value;
+      if (subtarea.trim() === "") {
+        Swal.fire("Ingresa subtarea");
+        return;
+      }
+      let config = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      }),
-    };
-    fetch(url2, config)
-      .then((response) => response.json())
-      .then((data) => {
-        Swal.fire("Registro exito!", "Tarea registrada");
-        setTimeout(() => {
-          location.reload();
-        }, 2000);
-      })
-      .catch((error) => console.log(error));
+        body: JSON.stringify({
+          estado: "incompleta",
+          nombre: subtarea,
+          id_subtareas: {
+            id: e.target.dataset.id,
+          },
+        }),
+      };
+      fetch(url2, config)
+        .then((response) => response.json())
+        .then((data) => {
+          Swal.fire("Registro exito!", "Tarea registrada");
+          setTimeout(() => {
+            location.reload();
+          }, 2000);
+        })
+        .catch((error) => console.log(error));
+    } else {
+      e.preventDefault();
+
+      let subtarea = e.path[2].children[0].children[0].value;
+      if (subtarea.trim() === "") {
+        Swal.fire("Ingresa subtarea");
+        return;
+      }
+      let config = {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          estado: e.target.dataset.nombre_tarea,
+          nombre: subtarea,
+          id_subtareas: {
+            id: e.target.dataset.id,
+          },
+        }),
+      };
+
+      fetch(`${url2}/${e.target.dataset.id_tarea}`, config)
+        .then((response) => response.json())
+        .then((data) => {
+          Swal.fire("Registro exito!", "Tarea registrada");
+          setTimeout(() => {
+            location.reload();
+          }, 2000);
+        })
+        .catch((error) => console.log(error));
+    }
   }
   if (e.target.matches(".eliminar_sub")) {
     Swal.fire({
@@ -278,7 +314,37 @@ document.addEventListener("click", (e) => {
       }
     });
   }
-  if (e.target.matches("."))
-    if (e.target.matches(".actualizar_sub")) {
-    }
+  if (e.target.matches(".completado_sub")) {
+    let config = {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        nombre: e.target.dataset.nombre,
+        estado: "completa",
+        id_subtareas: {
+          id: e.target.dataset.id_tarea,
+        },
+      }),
+    };
+    fetch(`${url2}/${e.target.dataset.id}`, config)
+      .then((response) => response.json())
+      .then((data) => {
+        Swal.fire("Actualizacion exito!", "Tarea completada");
+        setTimeout(() => {
+          location.reload();
+        }, 2000);
+      })
+      .catch((error) => console.log(error));
+  }
+
+  if (e.target.matches(".actualizar_sub")) {
+    e.preventDefault;
+    document.getElementById("nombre_subtarea").value = e.target.dataset.nombre;
+    document.querySelector(".guardar_subtarea").dataset.id_tarea =
+      e.target.dataset.id_tarea;
+    document.querySelector(".guardar_subtarea").dataset.nombre_tarea =
+      e.target.dataset.estado;
+  }
 });
