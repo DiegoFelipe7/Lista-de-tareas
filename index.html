@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lista de tareas</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css"
+    />
+  </head>
+  <body class="bg-light">
+    <h1 class="display-2 m-5 text-center fw-bold">
+      Seguimiento de <spam class="text-info">Tareas</spam>
+    </h1>
+    <div class="container">
+      <div class="row justify-content-between">
+        <div class="col-4">
+          <h1 class="text-center fw-bolder">Seguimiento Tareas</h1>
+          <h5 class="text-center fw-bolder">
+            Añade tareas y <spam class="text-info">administralas</spam>
+          </h5>
+          <hr class="bg-info" />
+          <div
+            class="d-flex w-100 p-5 border shadow rounded justify-content-center align-content-center bg-light"
+          >
+            <div class="w-75">
+              <form id="form-lista" autocomplete="off" method="POST">
+                <div class="mt-2">
+                  <label class="fw-bold" for="nombre"
+                    ><i class="bi bi-list-task"></i> Nombre tarea</label
+                  >
+                  <input
+                    class="form-control mt-2"
+                    type="text"
+                    id="nombre"
+                    name="nombre"
+                  />
+                </div>
+                <div class="mt-2">
+                  <button
+                    id="guardar_tarea"
+                    class="btn btn-info w-100 text-white fw-bold"
+                  >
+                    <i class="bi bi-arrow-right-square-fill"></i> Guardar tarea
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div id="listado-tareas" class="col-6">
+          <h1 class="text-center fw-bolder" id="titulo-listas">Mis tareas</h1>
+          <table>
+            <thead></thead>
+            <tbody id="ejemplo"></tbody>
+          </table>
+          <template id="template-listas">
+            <div class="w-100 border shadow rounded p-5 mt-2 bg-white">
+              <hr class="bg-dark" />
+              <div class="row justify-content-end">
+                <div class="col-1">
+                  <button
+                    id="eliminar_tarea"
+                    name="eliminar_tarea"
+                    title="Eliminar tarea"
+                    class="eliminar_tarea btn-close text-dark"
+                    aria-label="Close"
+                  ></button>
+                </div>
+              </div>
+              <div class="card mt-2">
+                <h5 id="titulo-tarea" class="card-header"></h5>
+                <div class="card-body">
+                  <form id="form-guardar-tarea" method="POST">
+                    <div class="row">
+                      <div class="col-8">
+                        <input
+                          id="subtarea"
+                          name="subtarea"
+                          class="subtarea form-control w-100"
+                          placeholder="Ingresa una subtareas "
+                        />
+                      </div>
+                      <div class="col-4">
+                        <button
+                          id="guardar_subtarea"
+                          name="guardar_subtarea"
+                          class="guardar_subtarea btn btn-outline-secondary"
+                        >
+                          Guardar
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <hr />
+              <div class="w-100">
+                <h3 class="text-dark text-center fw-bold">
+                  Subtareas 📋<samp></samp>
+                </h3>
+                <table id="super-tabla" class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>Actividad</th>
+                      <th>Estado</th>
+                      <th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tbody-final"></tbody>
+                </table>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+    </div>
+    <script src="js/tareas.js" async defer></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </body>
+</html>
