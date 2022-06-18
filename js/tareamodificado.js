@@ -9,7 +9,6 @@ const datos = (data) => {
   const fragment = document.createDocumentFragment();
 
   data.forEach((element) => {
-    console.log(element);
     //Div
     const div = document.createElement("div");
     div.classList.add(
@@ -134,15 +133,19 @@ const datos = (data) => {
       const tdAcciones = document.createElement("td");
       const btn_editar = document.createElement("button");
       btn_editar.classList.add("actualizar_sub", "btn", "btn-dark");
-      btn_editar.textContent = "U";
+      btn_editar.textContent = "✏️";
       btn_editar.title = "Editar tarea";
       btn_editar.dataset.id_tarea = element.subtarea[key].id;
       btn_editar.dataset.nombre = element.subtarea[key].nombre;
       btn_editar.dataset.estado = element.subtarea[key].estado;
 
+      element.subtarea[key].estado === "incompleta"
+        ? (btn_editar.disabled = false)
+        : (btn_editar.disabled = true);
+
       const btn_eliminar = document.createElement("button");
       btn_eliminar.classList.add("eliminar_sub", "btn", "btn-danger", "ms-1");
-      btn_eliminar.textContent = "D";
+      btn_eliminar.textContent = "X";
       btn_editar.title = "Eliminar tarea";
       btn_eliminar.dataset.id = element.subtarea[key].id;
 
@@ -150,10 +153,10 @@ const datos = (data) => {
       btn_completado.classList.add(
         "completado_sub",
         "btn",
-        "btn-success",
+        "btn-light",
         "ms-1"
       );
-      btn_completado.textContent = "C";
+      btn_completado.textContent = "✔️";
       btn_editar.title = "Completando";
       btn_completado.dataset.id = element.subtarea[key].id;
       btn_completado.dataset.nombre = element.subtarea[key].nombre;
@@ -286,7 +289,7 @@ document.addEventListener("click", (e) => {
       fetch(`${url2}/${e.target.dataset.id_tarea}`, config)
         .then((response) => response.json())
         .then((data) => {
-          Swal.fire("Registro exito!", "Tarea registrada");
+          Swal.fire("Registro exito!", "Tarea actualizada");
           setTimeout(() => {
             location.reload();
           }, 2000);
